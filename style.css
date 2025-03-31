@@ -1,0 +1,32 @@
+body {
+    font-family: Helvetica;
+    margin: 30;
+    padding: 10;
+    background-color:#3378a3;
+    text-align: left;
+}
+h1 {
+    color:#0d2839;
+    font-family: Helvetica;
+}
+
+highlited{
+    color:#41ff7d;
+}
+
+p {
+    color:#0d2839;
+    font-family: Helvetica;
+}
+
+a{
+    color:#671111;
+}
+
+img {
+    width: 150px;
+    height: 150px;
+    border-radius: 25%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
