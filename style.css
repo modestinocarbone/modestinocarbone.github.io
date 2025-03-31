@@ -23,6 +23,18 @@ a{
     color:#671111;
 }
 
+footer {
+
+    padding: 0px;
+    background-color: rgb(255, 255, 255);
+    color: white;
+    display: block;
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
 img {
     width: 150px;
     height: 150px;
