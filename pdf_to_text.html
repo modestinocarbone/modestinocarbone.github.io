@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF to readable text</title>
+    <title>Convertitore PDF in Testo Leggibile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,11 +46,11 @@
         }
         .converted-text {
             font-size: 18px;
-            line-height: 1.8;
+            line-height: 1.6;
             text-align: justify;
         }
         .converted-text p {
-            margin: 0 0 1em 0;
+            margin-bottom: 1em;
             text-indent: 1.5em;
         }
         .controls {
@@ -114,27 +114,33 @@
                 padding: 10px;
             }
             .converted-text {
-                font-size: 20px;
-                line-height: 2;
+                font-size: 18px;
+                /* Riduce drasticamente lo spazio tra le righe su mobile */
+                line-height: 1.4;
+            }
+            /* Gestione specifica per i paragrafi su mobile */
+            .converted-text p {
+                margin-bottom: 0.5em;
+                text-indent: 1em;
             }
         }
     </style>
 </head>
 <body>
-    <h1>PDF to readable text</h1>
+    <h1>Convertitore PDF in Testo Leggibile</h1>
     <div class="upload-container">
-        <p>Upload a PDF file and convert into an optimized mobile reader</p>
+        <p>Carica un file PDF e convertilo in testo ottimizzato per la lettura da mobile</p>
         <input type="file" id="fileInput" class="file-input" accept=".pdf">
-        <button id="uploadButton" class="upload-button">Select a PDF</button>
+        <button id="uploadButton" class="upload-button">Seleziona PDF</button>
     </div>
     
     <div id="loading" class="loading">
         <div class="loading-spinner"></div>
-        <p>I'm reading...</p>
+        <p>Estrazione del testo in corso...</p>
     </div>
     
     <div id="resultContainer" class="result-container">
-        <h2>Converted text</h2>
+        <h2>Testo Convertito</h2>
         <div id="convertedText" class="converted-text"></div>
         <div class="controls">
             <button id="increaseFontBtn">A+</button>
@@ -183,7 +189,7 @@
                         resultContainer.style.display = 'none';
                         extractTextFromPdf(file);
                     } else {
-                        alert('Load a valid PDF');
+                        alert('Per favore, carica un file PDF valido.');
                     }
                 }
             });
@@ -201,56 +207,97 @@
                         function processPage(pageNumber) {
                             return pdf.getPage(pageNumber).then(function(page) {
                                 return page.getTextContent().then(function(textContent) {
-                                    // Migliore gestione del testo e dei paragrafi
-                                    let prevItemY = null;
-                                    let prevItemX = null;
-                                    let currentParagraph = '';
-                                    let paragraphs = [];
-                                    const PARAGRAPH_THRESHOLD = 10; // Soglia per identificare un nuovo paragrafo
-                                    const LINE_BREAK_THRESHOLD = 1; // Soglia per identificare una nuova riga
-
+                                    // Combiniamo tutto in un unico flusso di testo, senza a capo
+                                    let allText = '';
+                                    
                                     // Ordina gli elementi in base alla posizione Y (dall'alto verso il basso)
-                                    const orderedItems = textContent.items.sort((a, b) => {
+                                    const items = textContent.items.sort((a, b) => {
+                                        if (Math.abs(b.transform[5] - a.transform[5]) < 1) {
+                                            // Se sono sulla stessa riga, ordina per posizione X
+                                            return a.transform[4] - b.transform[4];
+                                        }
                                         return b.transform[5] - a.transform[5];
                                     });
                                     
-                                    orderedItems.forEach(function(item, index) {
-                                        const itemY = item.transform[5];
-                                        const itemX = item.transform[4];
+                                    // Raggruppa gli elementi per Y per identificare le righe
+                                    const lines = [];
+                                    let currentLine = [];
+                                    let lastY = null;
+                                    
+                                    for (let i = 0; i < items.length; i++) {
+                                        const item = items[i];
                                         
-                                        // Controllo per nuovo paragrafo o nuova riga
-                                        if (prevItemY !== null) {
-                                            const yDiff = Math.abs(prevItemY - itemY);
-                                            
-                                            // Nuovo paragrafo se la differenza di Y è significativa
-                                            if (yDiff > PARAGRAPH_THRESHOLD) {
-                                                if (currentParagraph.trim() !== '') {
-                                                    paragraphs.push(currentParagraph.trim());
-                                                    currentParagraph = '';
-                                                }
-                                            } 
-                                            // Nuova riga all'interno dello stesso paragrafo
-                                            else if (yDiff > LINE_BREAK_THRESHOLD || itemX < prevItemX) {
-                                                currentParagraph += ' ';
+                                        // Salta elementi vuoti
+                                        if (!item.str.trim()) continue;
+                                        
+                                        const currY = Math.round(item.transform[5]);
+                                        
+                                        if (lastY === null || Math.abs(currY - lastY) <= 2) {
+                                            currentLine.push(item);
+                                        } else {
+                                            if (currentLine.length > 0) {
+                                                lines.push([...currentLine]);
+                                                currentLine = [item];
+                                            } else {
+                                                currentLine.push(item);
                                             }
                                         }
                                         
-                                        currentParagraph += item.str;
-                                        prevItemY = itemY;
-                                        prevItemX = itemX;
-                                    });
-                                    
-                                    // Aggiungi l'ultimo paragrafo se non vuoto
-                                    if (currentParagraph.trim() !== '') {
-                                        paragraphs.push(currentParagraph.trim());
+                                        lastY = currY;
                                     }
                                     
-                                    // Unisci i paragrafi in HTML
-                                    const formattedText = paragraphs
-                                        .map(para => `<p>${para}</p>`)
-                                        .join('');
+                                    if (currentLine.length > 0) {
+                                        lines.push(currentLine);
+                                    }
                                     
-                                    return formattedText;
+                                    // Processa le linee per formare il testo continuo
+                                    const paragraphs = [];
+                                    let currentParagraph = '';
+                                    
+                                    for (let i = 0; i < lines.length; i++) {
+                                        const lineText = lines[i].map(item => item.str).join(' ').trim();
+                                        
+                                        if (!lineText) continue;
+                                        
+                                        // Se il paragrafo è vuoto, iniziamo uno nuovo
+                                        if (!currentParagraph) {
+                                            currentParagraph = lineText;
+                                        } 
+                                        // Se la linea termina con punto, punto esclamativo o punto interrogativo
+                                        // consideriamo che sia la fine di un paragrafo
+                                        else if (currentParagraph.match(/[.!?]$/)) {
+                                            currentParagraph += ' ' + lineText;
+                                            
+                                            // Se anche questa linea termina con punteggiatura forte o è molto breve,
+                                            // completiamo il paragrafo
+                                            if (lineText.match(/[.!?]$/) || lineText.length < 30) {
+                                                paragraphs.push(currentParagraph);
+                                                currentParagraph = '';
+                                            }
+                                        }
+                                        // Altrimenti, continuiamo ad aggiungere al paragrafo corrente
+                                        else {
+                                            currentParagraph += ' ' + lineText;
+                                            
+                                            // Se abbiamo accumulato molto testo o questa linea termina con punteggiatura,
+                                            // completiamo il paragrafo
+                                            if (currentParagraph.length > 500 || lineText.match(/[.!?]$/)) {
+                                                paragraphs.push(currentParagraph);
+                                                currentParagraph = '';
+                                            }
+                                        }
+                                    }
+                                    
+                                    // Aggiungi l'ultimo paragrafo se presente
+                                    if (currentParagraph) {
+                                        paragraphs.push(currentParagraph);
+                                    }
+                                    
+                                    // Combiniamo tutto in un unico flusso di testo
+                                    // Invece di creare div o paragrafi separati, manteniamo tutto in un unico elemento
+                                    allText = paragraphs.join(' ');
+                                    
+                                    return `<div class="para">${allText}</div>`;
                                 });
                             });
                         }
@@ -265,6 +312,15 @@
                             
                             loading.style.display = 'none';
                             resultContainer.style.display = 'block';
+                            
+                            // Aggiungi stile per il contenitore di testo
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                .converted-text .para {
+                                    text-align: justify;
+                                }
+                            `;
+                            document.head.appendChild(style);
                             
                             showPage(0);
                             updateNavigationButtons();
@@ -287,8 +343,6 @@
                     
                     // Scroll to the top of the page
                     window.scrollTo(0, 0);
-                    // Or scroll to the result container
-                    // resultContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             }
             
