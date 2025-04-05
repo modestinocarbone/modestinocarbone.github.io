@@ -145,14 +145,14 @@
         <div class="controls">
             <button id="increaseFontBtn">A+</button>
             <button id="decreaseFontBtn">A-</button>
-            <button id="copyTextBtn">Copia Testo</button>
+            <button id="copyTextBtn">Copy text</button>
         </div>
         
         <div class="pagination">
-            <button id="prevPageBtn" disabled>Pagina Precedente</button>
-            <button id="nextPageBtn">Pagina Successiva</button>
+            <button id="prevPageBtn" disabled> < Previous Page</button>
+            <button id="nextPageBtn">Next Page > </button>
         </div>
-        <div id="pageInfo" class="page-info">Pagina 1</div>
+        <div id="pageInfo" class="page-info">Page 1</div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
@@ -338,7 +338,7 @@
                 if (pageIndex >= 0 && pageIndex < extractedPages.length) {
                     currentPageIndex = pageIndex;
                     convertedText.innerHTML = extractedPages[pageIndex];
-                    pageInfo.textContent = `Pagina ${pageIndex + 1} di ${extractedPages.length}`;
+                    pageInfo.textContent = `Page ${pageIndex + 1} of ${extractedPages.length}`;
                     updateNavigationButtons();
                     
                     // Scroll to the top of the page
