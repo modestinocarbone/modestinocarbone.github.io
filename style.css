@@ -1,23 +1,36 @@
 body {
-    font-family: Helvetica;
-    margin: 30;
-    padding: 10;
-    background-color:#3378a3;
-    text-align: left;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
+
 h1 {
     color:#0d2839;
     font-family: Helvetica;
 }
 
 highlited{
-    color:#41ff7d;
+    color:#4CAF50;
 }
 
 p {
     color:#0d2839;
     font-family: Helvetica;
 }
+
+.upload-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
 a{
     color:#671111;
