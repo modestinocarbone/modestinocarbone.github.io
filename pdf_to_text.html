@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF FOR MOBILE READER</title>
-    <style>
+<style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -129,7 +129,7 @@
 <body>
     <h1>Convert PDF into a readable text</h1>
     <div class="upload-container">
-        <p>Upload a PDF file and optimize lecture</p>
+        <p>Upload a PDF file and optimize reading</p>
         <input type="file" id="fileInput" class="file-input" accept=".pdf">
         <button id="uploadButton" class="upload-button">Select a PDF</button>
     </div>
@@ -140,7 +140,7 @@
     </div>
     
     <div id="resultContainer" class="result-container">
-        <h2>Coverted Text</h2>
+        <h2>Converted Text</h2>
         <div id="convertedText" class="converted-text"></div>
         <div class="controls">
             <button id="increaseFontBtn">A+</button>
@@ -157,7 +157,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
     <script>
-        // Configura il worker di PDF.js
+        // Set up PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js';
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -189,7 +189,7 @@
                         resultContainer.style.display = 'none';
                         extractTextFromPdf(file);
                     } else {
-                        alert('Per favore, carica un file PDF valido.');
+                        alert('Please upload a valid PDF file.');
                     }
                 }
             });
@@ -207,19 +207,15 @@
                         function processPage(pageNumber) {
                             return pdf.getPage(pageNumber).then(function(page) {
                                 return page.getTextContent().then(function(textContent) {
-                                    // Combiniamo tutto in un unico flusso di testo, senza a capo
                                     let allText = '';
                                     
-                                    // Ordina gli elementi in base alla posizione Y (dall'alto verso il basso)
                                     const items = textContent.items.sort((a, b) => {
                                         if (Math.abs(b.transform[5] - a.transform[5]) < 1) {
-                                            // Se sono sulla stessa riga, ordina per posizione X
                                             return a.transform[4] - b.transform[4];
                                         }
                                         return b.transform[5] - a.transform[5];
                                     });
                                     
-                                    // Raggruppa gli elementi per Y per identificare le righe
                                     const lines = [];
                                     let currentLine = [];
                                     let lastY = null;
@@ -227,7 +223,6 @@
                                     for (let i = 0; i < items.length; i++) {
                                         const item = items[i];
                                         
-                                        // Salta elementi vuoti
                                         if (!item.str.trim()) continue;
                                         
                                         const currY = Math.round(item.transform[5]);
@@ -250,7 +245,6 @@
                                         lines.push(currentLine);
                                     }
                                     
-                                    // Processa le linee per formare il testo continuo
                                     const paragraphs = [];
                                     let currentParagraph = '';
                                     
@@ -259,28 +253,18 @@
                                         
                                         if (!lineText) continue;
                                         
-                                        // Se il paragrafo è vuoto, iniziamo uno nuovo
                                         if (!currentParagraph) {
                                             currentParagraph = lineText;
-                                        } 
-                                        // Se la linea termina con punto, punto esclamativo o punto interrogativo
-                                        // consideriamo che sia la fine di un paragrafo
-                                        else if (currentParagraph.match(/[.!?]$/)) {
+                                        } else if (currentParagraph.match(/[.!?]$/)) {
                                             currentParagraph += ' ' + lineText;
                                             
-                                            // Se anche questa linea termina con punteggiatura forte o è molto breve,
-                                            // completiamo il paragrafo
                                             if (lineText.match(/[.!?]$/) || lineText.length < 30) {
                                                 paragraphs.push(currentParagraph);
                                                 currentParagraph = '';
                                             }
-                                        }
-                                        // Altrimenti, continuiamo ad aggiungere al paragrafo corrente
-                                        else {
+                                        } else {
                                             currentParagraph += ' ' + lineText;
                                             
-                                            // Se abbiamo accumulato molto testo o questa linea termina con punteggiatura,
-                                            // completiamo il paragrafo
                                             if (currentParagraph.length > 500 || lineText.match(/[.!?]$/)) {
                                                 paragraphs.push(currentParagraph);
                                                 currentParagraph = '';
@@ -288,13 +272,10 @@
                                         }
                                     }
                                     
-                                    // Aggiungi l'ultimo paragrafo se presente
                                     if (currentParagraph) {
                                         paragraphs.push(currentParagraph);
                                     }
                                     
-                                    // Combiniamo tutto in un unico flusso di testo
-                                    // Invece di creare div o paragrafi separati, manteniamo tutto in un unico elemento
                                     allText = paragraphs.join(' ');
                                     
                                     return `<div class="para">${allText}</div>`;
@@ -313,7 +294,6 @@
                             loading.style.display = 'none';
                             resultContainer.style.display = 'block';
                             
-                            // Aggiungi stile per il contenitore di testo
                             const style = document.createElement('style');
                             style.textContent = `
                                 .converted-text .para {
@@ -327,7 +307,7 @@
                         });
                     }).catch(function(error) {
                         loading.style.display = 'none';
-                        alert('Errore durante l\'elaborazione del PDF: ' + error.message);
+                        alert('Error processing PDF: ' + error.message);
                     });
                 };
                 
@@ -340,8 +320,6 @@
                     convertedText.innerHTML = extractedPages[pageIndex];
                     pageInfo.textContent = `Page ${pageIndex + 1} of ${extractedPages.length}`;
                     updateNavigationButtons();
-                    
-                    // Scroll to the top of the page
                     window.scrollTo(0, 0);
                 }
             }
@@ -368,8 +346,8 @@
             copyTextBtn.addEventListener('click', function() {
                 const textToCopy = convertedText.textContent;
                 navigator.clipboard.writeText(textToCopy)
-                    .then(() => alert('Testo copiato negli appunti!'))
-                    .catch(err => alert('Errore nella copia del testo: ' + err));
+                    .then(() => alert('Text copied to clipboard!'))
+                    .catch(err => alert('Error copying text: ' + err));
             });
             
             prevPageBtn.addEventListener('click', function() {
