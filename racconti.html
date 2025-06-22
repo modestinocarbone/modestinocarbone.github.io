@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raccontini</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+background: #f4b400;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 220px;
+    margin: 15px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-content {
+    padding: 15px;
+    text-align: center;
+  }
+
+  .card a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .card a:hover {
+    color: #007BFF;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Raccontini</h1>
+    <p>Piccole storie da leggere e scaricare</p>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <img src="macchina.jpeg" alt="Copertina La macchina mangia similitudini">
+      <div class="card-content">
+        <a href="storie/la-macchina-mangia-similitudini.pdf" target="_blank">La macchina mangia similitudini</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
