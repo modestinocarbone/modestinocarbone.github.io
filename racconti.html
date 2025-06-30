@@ -3,30 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Raccontini</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="icon" href="img/download.png">
+  <title>RACCONTINI</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #f9f9f9;
+    font-family: "Inter", sans-serif;    
+    background: #F00000;
+    text-align: center;
+    color: white;
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
   }
 
   header {
-    background: #f9f9f9;
-    color: white;
-    padding: 20px;
+    margin-top:40px;
     text-align: center;
+    margin-bottom: 30px;
   }
+
+  header img {
+    display: block;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: 120vw;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+
 
   h1 {
     margin: 0;
-    color: black;
+    letter-spacing: -1px;
   }
 
 
- p {
-    color: black;
+  p {
+    letter-spacing: -0.7px;
+    font-size: large;
   }
 
   .container {
@@ -38,13 +56,14 @@
 
   .card {
     background: white;
-    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     width: 220px;
-    margin: 15px;
+    height: 300px;
+    margin: 25px;
     overflow: hidden;
     transition: transform 0.2s;
     display: flex;
+    position: relative;
     flex-direction: column;
   }
 
@@ -52,69 +71,145 @@
     transform: scale(1.05);
   }
 
+  .card-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .external-icon {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 50px;
+    height: auto;
+    z-index: 5;
+    transition: transform 0.2s;
+  }
+  .external-icon:hover{
+    transform: scale(1.2);
+  }
+
   .image-container {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 220px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
   }
 
   .image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     display: block;
   }
 
   .card-content {
     padding: 15px;
-    text-align: center;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
   }
 
-  .card a {
+
+  a {
     text-decoration: none;
-    color: #333;
-    font-weight: bold;
+    color: black;
   }
 
-  .card a:hover {
-    color: #007BFF;
+  a:hover {
+    color: #F00000;
   }
+
+  .footer{
+    position: fixed;
+    margin: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .footer p{
+    letter-spacing: -0.7px;
+    font-size: small;
+    margin: 10px;
+  }
+
+  .footer a{
+    letter-spacing: -0.7px;
+    font-size: small;
+    margin: 0;
+    color: white;
+  }
+
 </style>
 </head>
 <body>
   <header>
-    <h1>Raccontini</h1>
-    <p>Piccole storie da leggere e scaricare</p>
+    <img src="img/title.png" alt="titolo">
   </header>
 
+  <p>Piccole storie da leggere e scaricare</p>
   
   <div class="container">
-    
-      <div class="card">
-      <img src="cowboy_pirati.jpeg" alt="I cowboy pirati">
-      <div class="card-content">
-      <a href="https://drive.google.com/file/d/1L-9TM710BIe7YJ4thi6na1MR80eZCWxk/view?usp=sharing" target="_blank">I cowboy pirati </a>
-      </div>
-      </div>
-
-
-    <div class="card">
-    <img src="sillabe.jpeg" alt="Il sillabario dei traumi">
-    <div class="card-content">
-    <a  href="https://drive.google.com/file/d/1aMFGtc8jF8TcztIm34nrMq1D-hbMBaV0/view?usp=sharing" target="_blank">Il sillabario dei traumi</a>
+    <div class="card-wrapper">
+      <a href="https://drive.google.com/file/d/1L-9TM710BIe7YJ4thi6na1MR80eZCWxk/view?usp=sharing" target="_blank">
+        <div class="card">
+          <div class="image-container">
+            <img src="img/cowboy_pirati.jpeg" alt="I cowboy pirati">
+          </div>
+          <div class="card-content">
+            I cowboy pirati
+          </div>
+        </div>
+      </a>
+      <a href="https://drive.google.com/uc?export=download&id=1L-9TM710BIe7YJ4thi6na1MR80eZCWxk">
+        <img class="external-icon" src="img/download.png" alt="Scarica PDF">
+      </a>    
     </div>
+
+    <div class="card-wrapper">
+      <a  href="https://drive.google.com/file/d/1aMFGtc8jF8TcztIm34nrMq1D-hbMBaV0/view?usp=sharing" target="_blank">
+        <div class="card">
+          <div class="image-container">
+            <img src="img/sillabe.jpeg" alt="Il sillabario dei traumi">
+          </div>
+          <div class="card-content">
+            Il sillabario dei traumi
+          </div>
+        </div>
+      </a>
+      <a href="https://drive.google.com/uc?export=download&id=1aMFGtc8jF8TcztIm34nrMq1D-hbMBaV0">
+        <img class="external-icon" src="img/download.png" alt="Scarica PDF">
+      </a>    
     </div>
+
 
   
-  
-
-    <div class="card">
-    <img src="macchina.jpeg" alt="Copertina La macchina mangia similitudini">
-    <div class="card-content">
-    <a href="https://drive.google.com/file/d/1JRm46aHCSvnJzt_Rav4I79eRjv5AglDA/view?usp=sharing" target="_blank">La macchina mangia similitudini</a>
+    <div class="card-wrapper">
+      <a href="https://drive.google.com/file/d/1JRm46aHCSvnJzt_Rav4I79eRjv5AglDA/view?usp=sharing" target="_blank">
+        <div class="card">
+          <div class="image-container">
+            <img src="img/macchina.jpeg" alt="Copertina La macchina mangia similitudini">
+          </div>
+          <div class="card-content">
+            La macchina mangia similitudini
+          </div>
+        </div>
+      </a>
+      <a href="https://drive.google.com/uc?export=download&id=1JRm46aHCSvnJzt_Rav4I79eRjv5AglDA">
+        <img class="external-icon" src="img/download.png" alt="Scarica PDF">
+      </a>    
     </div>
-    </div>
 
+  </div>
+
+  <div class="footer">
+    <p><a href="https://modestinocarbone.github.io">Modestino Carbone</a> Raccontini 2025</p>
   </div>
 
 </body>
