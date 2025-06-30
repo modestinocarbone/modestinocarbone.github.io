@@ -34,13 +34,10 @@
     overflow-x: hidden;
   }
 
-
-
   h1 {
     margin: 0;
     letter-spacing: -1px;
   }
-
 
   p {
     letter-spacing: -0.7px;
@@ -116,7 +113,6 @@
     align-items: flex-end;
   }
 
-
   a {
     text-decoration: none;
     color: black;
@@ -126,24 +122,37 @@
     color: #F00000;
   }
 
-  .footer{
-    position: fixed;
-    margin: 0px;
-    bottom: 0px;
-    left: 0px;
+  .footer {
+    display: none;
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
 
-  .footer p{
+  .footer.show {
+    display: block;
+    opacity: 1;
+  }
+
+  .footer p {
     letter-spacing: -0.7px;
     font-size: small;
     margin: 10px;
+  color: white;
   }
 
-  .footer a{
-    letter-spacing: -0.7px;
+  .footer a {
+    letter-spacing: 0.7px;
     font-size: small;
     margin: 0;
     color: white;
+  }
+
+  /* Aggiungiamo un po' di spazio extra per assicurare lo scroll */
+  .spacer {
+    height: 100px;
   }
 
 </style>
@@ -156,6 +165,7 @@
   <p>Piccole storie da leggere e scaricare</p>
   
   <div class="container">
+    <!-- Card 1 -->
     <div class="card-wrapper">
       <a href="https://drive.google.com/file/d/1L-9TM710BIe7YJ4thi6na1MR80eZCWxk/view?usp=sharing" target="_blank">
         <div class="card">
@@ -172,6 +182,7 @@
       </a>    
     </div>
 
+    <!-- Card 2 -->
     <div class="card-wrapper">
       <a  href="https://drive.google.com/file/d/1aMFGtc8jF8TcztIm34nrMq1D-hbMBaV0/view?usp=sharing" target="_blank">
         <div class="card">
@@ -188,8 +199,7 @@
       </a>    
     </div>
 
-
-  
+    <!-- Card 3 -->
     <div class="card-wrapper">
       <a href="https://drive.google.com/file/d/1JRm46aHCSvnJzt_Rav4I79eRjv5AglDA/view?usp=sharing" target="_blank">
         <div class="card">
@@ -205,13 +215,33 @@
         <img class="external-icon" src="img/download.png" alt="Scarica PDF">
       </a>    
     </div>
-
   </div>
 
-  <div class="footer">
+  <!-- Spazio extra per permettere scroll completo -->
+  
+
+  <!-- Footer nascosto -->
+  <div class="footer" id="pageFooter">
     <p><a href="https://github.com/modestinocarbone">Modestino Carbone</a> Raccontini 2025</p>
     <p><a href="https://github.com/gwetano">Gwetano</a> UI/UX</p>
   </div>
 
+<div class="spacer"></div>
+  <!-- JS per mostrare il footer quando si arriva in fondo -->
+  <script>
+    const footer = document.getElementById('pageFooter');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const fullHeight = document.body.offsetHeight;
+
+      if (scrollY + viewportHeight >= fullHeight - 5) {
+        footer.classList.add('show');
+      } else {
+        footer.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>
